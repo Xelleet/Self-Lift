@@ -1,6 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 
 function Register(){
+    const [formData, setFormData] = useState({
+        login: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: value
+        }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        if (formData.password !== formData.confirmPassword) {
+            alert('Пароли не совпадают');
+            return;
+        }
+
+        try {
+            const response = await fetch('http://localhost:8000/api/users/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                },
+                body: JSON.stringify({
+                    username: formData.login,
+                    email: formData.email,
+                    password: formData.password
+                })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.detail || 'Ошибка регистрации');
+            }
+
+            const data = await response.json();
+            alert('Регистрация успешна!');
+            // Здесь можно добавить редирект на страницу входа
+        } catch (error) {
+            console.error('Ошибка:', error);
+            alert(error.message || 'Произошла ошибка при регистрации');
+        }
+    };
+
     return(
         <div>
             <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -12,9 +63,9 @@ function Register(){
 
                 <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-                        <form className="space-y-6">
+                        <form className="space-y-6" onSubmit={handleSubmit}>
                             <div>
-                            <label htmlFor="login" className="block text-sm font-medium text-gray-700">
+                                <label htmlFor="login" className="block text-sm font-medium text-gray-700">
                                     Login
                                 </label>
                                 <div className="mt-1">
@@ -24,6 +75,8 @@ function Register(){
                                         type="text"
                                         autoComplete="login"
                                         required
+                                        value={formData.login}
+                                        onChange={handleChange}
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                     />
                                 </div>
@@ -37,6 +90,8 @@ function Register(){
                                         type="email"
                                         autoComplete="email"
                                         required
+                                        value={formData.email}
+                                        onChange={handleChange}
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                     />
                                 </div>
@@ -53,6 +108,8 @@ function Register(){
                                         type="password"
                                         autoComplete="new-password"
                                         required
+                                        value={formData.password}
+                                        onChange={handleChange}
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                     />
                                 </div>
@@ -69,6 +126,8 @@ function Register(){
                                         type="password"
                                         autoComplete="new-password"
                                         required
+                                        value={formData.confirmPassword}
+                                        onChange={handleChange}
                                         className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
                                     />
                                 </div>
