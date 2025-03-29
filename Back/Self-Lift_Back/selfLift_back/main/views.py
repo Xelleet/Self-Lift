@@ -36,3 +36,9 @@ def login_users(request):
         'user_id': user.id,
         'username': user.username
     }, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def user_list(request):
+    users = CustomUser.objects.all()
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)

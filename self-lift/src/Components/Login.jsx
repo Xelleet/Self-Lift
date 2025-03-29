@@ -3,7 +3,6 @@ import React, {useState} from "react";
 function Login(){
     const [formData, setFormData] = useState({
             login: '',
-            email: '',
             password: '',
         });
     
@@ -27,22 +26,20 @@ function Login(){
                     },
                     body: JSON.stringify({
                         username: formData.login,
-                        email: formData.email,
                         password: formData.password
                     })
                 });
     
                 if (!response.ok) {
                     const errorData = await response.json();
-                    throw new Error(errorData.detail || 'Ошибка регистрации');
+                    throw new Error(errorData.detail || 'Ошибка входа');
                 }
     
                 const data = await response.json();
-                alert('Регистрация успешна!');
-                // Здесь можно добавить редирект на страницу входа
+                alert('Вы успешно вошли!');
             } catch (error) {
                 console.error('Ошибка:', error);
-                alert(error.message || 'Произошла ошибка при регистрации');
+                alert(error.message || 'Произошла ошибка при входе');
             }
         };
     return(
