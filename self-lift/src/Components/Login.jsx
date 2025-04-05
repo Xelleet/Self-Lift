@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 
-function Login(){
+function Login({setIsAuthenticated, setUserData}){
     const [formData, setFormData] = useState({
             login: '',
             password: '',
@@ -36,6 +36,12 @@ function Login(){
                 }
     
                 const data = await response.json();
+                localStorage.setItem('token', data.token);
+                setIsAuthenticated(true);
+                setUserData({
+                    username: data.username,
+                    email: data.email
+                });
                 alert('Вы успешно вошли!');
             } catch (error) {
                 console.error('Ошибка:', error);

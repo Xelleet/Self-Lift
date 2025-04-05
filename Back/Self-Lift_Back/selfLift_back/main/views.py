@@ -1,12 +1,12 @@
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.contrib.auth import authenticate
 from .serializers import UserSerializer, LoginSerializer
 from .models import CustomUser
 from rest_framework.authtoken.models import Token
 from django.contrib.auth.hashers import check_password
-
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(['POST'])
 def register_user(request):
@@ -42,3 +42,23 @@ def user_list(request):
     users = CustomUser.objects.all()
     serializer = UserSerializer(users, many=True)
     return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_current_user(request):
+    user = request.user
+    return Response({
+        'username': user.username,
+        'email': user.email
+    })
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def verify_token(request):
+    return Response({
+        'user': {
+            'id': request.user.id,
+            'username': request.user.username,
+            'email': request.user.email,
+        }
+    })

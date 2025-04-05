@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Register(){
+function Register({setIsAuthenticated, setUserData}){
     const [formData, setFormData] = useState({
         login: '',
         email: '',
@@ -44,6 +44,12 @@ function Register(){
             }
 
             const data = await response.json();
+            localStorage.setItem('token', data.token);
+            setIsAuthenticated(true);
+            setUserData({
+                username: data.username,
+                email: data.email
+            });
             alert('Регистрация успешна!');
             // Здесь можно добавить редирект на страницу входа
         } catch (error) {
