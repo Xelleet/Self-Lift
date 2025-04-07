@@ -34,7 +34,8 @@ def login_users(request):
     return Response({
         'token': token.key,
         'user_id': user.id,
-        'username': user.username
+        'username': user.username,
+        'email': user.email
     }, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
@@ -45,16 +46,8 @@ def user_list(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_current_user(request):
-    user = request.user
-    return Response({
-        'username': user.username,
-        'email': user.email
-    })
-
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def verify_token(request):
+    print(request.user)
     return Response({
         'user': {
             'id': request.user.id,

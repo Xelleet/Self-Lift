@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+from corsheaders.defaults import default_headers
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -29,7 +31,9 @@ ALLOWED_HOSTS = []
 AUTH_USER_MODEL = 'main.CustomUser'
 
 CORS_ALLOW_ALL_ORIGINS = True  # Только для разработки! В продакшене настройте конкретные домены (хотя для продакшена нам ещё как муравею до Китая)
-
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'authorization',
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -41,14 +45,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt',
     'corsheaders',
     'main',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':[
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
+
 }
 
 MIDDLEWARE = [

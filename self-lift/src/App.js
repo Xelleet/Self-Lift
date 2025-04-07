@@ -10,18 +10,22 @@ function App() {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    console.log('Токен в localStorage:', token); // <--- сюда
     if (token) {
       checkAuth(token);
     }
   }, []);
 
   const checkAuth = async (token) => {
+
     try {
       const response = await fetch('http://localhost:8000/api/verify-token/', {
         headers: {
+          'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         }
       });
+      console.log(response);
       if (response.ok) {
         const data = await response.json();
         setUserData(data.user);
