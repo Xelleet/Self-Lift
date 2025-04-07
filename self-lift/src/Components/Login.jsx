@@ -1,4 +1,5 @@
 import React, {useState} from "react";
+import RequireAuth from "./RequireAuth";
 
 function Login({setIsAuthenticated, setUserData}){
     const [formData, setFormData] = useState({
@@ -42,6 +43,7 @@ function Login({setIsAuthenticated, setUserData}){
                     username: data.username,
                     email: data.email
                 });
+                <RequireAuth userId={data.id}/>
                 alert('Вы успешно вошли!');
             } catch (error) {
                 console.error('Ошибка:', error);

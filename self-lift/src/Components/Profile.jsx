@@ -1,36 +1,10 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import TaskForm from "./TaskForm";
+import RequireAuth from "./RequireAuth";
 
 function Profile({ userData }){
-    /*const [userData, setUserData] = React.useState({
-        username: '',
-        email: ''
-    });
-
-    React.useEffect(() => {
-        const fetchUserData = async () => {
-            try {
-                const response = await fetch('http://localhost:8000/api/users/me/', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error('Не удалось получить данные пользователя');
-                }
-
-                const data = await response.json();
-                setUserData(data);
-            } catch (error) {
-                console.error('Ошибка:', error);
-                alert('Не удалось загрузить данные профиля');
-            }
-        };
-
-        fetchUserData();
-    }, []);*/
+    const[count, setCount] = useState(0);
+    <RequireAuth userId={userData.id}/>
     return(
         <div>
                 <div className="min-h-screen bg-gray-100 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -67,6 +41,7 @@ function Profile({ userData }){
                             </div>
                         </div>
                     </div>
+                    <TaskForm userId={userData.id}/>
                 </div>
         </div>
     )

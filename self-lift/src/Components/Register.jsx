@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import RequireAuth from "./RequireAuth";
 
 function Register({setIsAuthenticated, setUserData}){
     const [formData, setFormData] = useState({
