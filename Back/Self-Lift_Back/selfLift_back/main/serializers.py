@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser, Task
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,3 +37,15 @@ class LoginSerializer(serializers.Serializer):
 
         data['user'] = user
         return data
+
+class TaskSerializer(serializers.ModelSerializer):
+    user = serializers.PrimaryKeyRelatedField(read_only=True)
+
+    class Meta:
+        model = Task
+        fields = ('id', 'user', 'title', 'description', 'points_to_complete', 'current_points', 'created_at', 'updated_at')
+        read_only_fields = ('user', 'current_points', 'created_at', 'updated_at')
+
+    def create(self, validated_data):
+        task = Task.objects.create(**validated_data)
+        return task
