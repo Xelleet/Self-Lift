@@ -22,7 +22,7 @@ function App() {
       const response = await fetch('http://localhost:8000/api/verify-token/', {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
+          'Authorization': `Token ${token}`
         }
       });
       console.log(response);

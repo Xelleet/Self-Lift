@@ -48,7 +48,6 @@ def user_list(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def verify_token(request):
-    print(request.user)
     return Response({
         'user': {
             'id': request.user.id,

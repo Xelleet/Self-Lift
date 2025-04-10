@@ -45,7 +45,7 @@ function TaskForm({ userId }) { // Предполагаем, что userId пе�
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
-                    'Authorization': `Bearer ${token}` // Добавляем токен в заголовок
+                    'Authorization': `Token ${token}` // Добавляем токен в заголовок
                 },
                 body: JSON.stringify({
                     title: taskData.title,
