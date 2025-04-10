@@ -150,6 +150,7 @@ function Register({setIsAuthenticated, setUserData}){
                             </div>
                         </form>
                     </div>
+                    <a href="/login" class="text-blue-600 hover:text-blue-800 font-semibold underline underline-offset-2">Уже есть аккаунт?</a>
                 </div>
             </div>
         </div>

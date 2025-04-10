@@ -70,6 +70,7 @@ function TaskForm({ userId }) { // Предполагаем, что userId пе�
                 description: '',
                 points_to_complete: '',
             });
+            window.location.reload();
             // TODO: Обновить список задач пользователя, если он отображается где-то
 
         } catch (err) {

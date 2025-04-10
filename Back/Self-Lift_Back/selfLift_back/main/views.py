@@ -56,6 +56,17 @@ def verify_token(request):
         }
     })
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_tasks(request):
+    return Response({
+        'task': {
+            'id': request.task.id,
+            'title': request.task.title,
+            'description': request.task.description,
+        }
+    })
+
 # --- Task Views --- --- --- --- --- ---
 
 @api_view(['GET', 'POST'])

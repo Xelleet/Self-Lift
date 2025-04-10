@@ -7,12 +7,16 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-d
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [isAuthChecked, setIsAuthChecked] = useState(false);
+
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    console.log('Токен в localStorage:', token); // <--- сюда
     if (token) {
       checkAuth(token);
+    }
+    else{
+      setIsAuthChecked(true);
     }
   }, []);
 
@@ -25,7 +29,6 @@ function App() {
           'Authorization': `Token ${token}`
         }
       });
-      console.log(response);
       if (response.ok) {
         const data = await response.json();
         setUserData(data.user);
@@ -37,11 +40,14 @@ function App() {
     } catch (error) {
       localStorage.removeItem('token');
       setIsAuthenticated(false);
+    } finally {
+      setIsAuthChecked(true); // <--- Без это фигни ничего работать не будет
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('userData');
     setIsAuthenticated(false);
     setUserData(null);
   };
@@ -49,13 +55,22 @@ function App() {
   return (
     <Router>
       <div className="App">
+      {!isAuthChecked ? (
+        <div className="flex items-center justify-center h-screen bg-gray-100">
+        <div className="flex flex-col items-center gap-2">
+          <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+          <span className="text-gray-600 text-lg font-medium">Загрузка...</span>
+        </div>
+      </div>
+      ) : (
         <Routes>
-          <Route path="/login" element={!isAuthenticated ? <Login setIsAuthenticated={setIsAuthenticated} setUserData={setUserData} /> : <Navigate to="/profile" />} />
+          <Route path="/login" element={<Login setIsAuthenticated={setIsAuthenticated} setUserData={setUserData}/>} />
           <Route path="/register" element={!isAuthenticated ? <Register setIsAuthenticated={setIsAuthenticated} setUserData={setUserData} /> : <Navigate to="/profile" />} />
-          <Route path="/profile" element={isAuthenticated ? <Profile userData={userData} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+          <Route path="/profile" element={isAuthenticated ? <Profile userData={userData} logout={handleLogout} isAuthenticated={isAuthenticated}/> : <Navigate to="/login" />} />
           <Route path="/" element={<Navigate to={isAuthenticated ? "/profile" : "/login"} />} />
         </Routes>
-      </div>
+      )}
+    </div>
     </Router>
   );
 }

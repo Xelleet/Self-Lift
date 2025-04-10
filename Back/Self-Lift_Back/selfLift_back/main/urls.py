@@ -9,7 +9,7 @@ urlpatterns = [
     path('login/', views.login_users, name='login'),
     #path('login/users/', views.user_list, name='login-users'),
     path('verify-token/', views.verify_token, name='verify-token'),
-
+    path('users/<int:user_id>/tasks/', views.user_tasks, name='user-tasks'),
     # Tasks URLs
     path('users/<int:user_id>/tasks/', views.user_tasks, name='user-tasks'),
 ]

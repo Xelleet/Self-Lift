@@ -1,7 +1,10 @@
 import React, {useState} from "react";
 import RequireAuth from "./RequireAuth";
+import {useNavigate } from "react-router-dom";
 
-function Login({setIsAuthenticated, setUserData}){
+
+function Login({setIsAuthenticated, setUserData, setIsAuthChecked}){
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
             login: '',
             password: '',
@@ -38,13 +41,15 @@ function Login({setIsAuthenticated, setUserData}){
     
                 const data = await response.json();
                 localStorage.setItem('token', data.token);
-                setIsAuthenticated(true);
+                console.log(data);
                 setUserData({
+                    id: data.user_id,
                     username: data.username,
                     email: data.email
                 });
-                <RequireAuth userId={data.id}/>
-                alert('Вы успешно вошли!');
+                setIsAuthenticated(true);
+                navigate('/profile');
+                //window.location.reload(); //К сожалению, из-за криворукости разработчика нам приходится пользоваться подобными костылями
             } catch (error) {
                 console.error('Ошибка:', error);
                 alert(error.message || 'Произошла ошибка при входе');
@@ -100,6 +105,7 @@ function Login({setIsAuthenticated, setUserData}){
                             </div>
                         </form>
                     </div>
+                    <a href="/register" class="text-blue-600 hover:text-blue-800 font-semibold underline underline-offset-2">Нет аккаунта? Сделаем абсолютно бесплатно</a>
                 </div>
         </div>
     )
